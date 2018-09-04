@@ -1,16 +1,15 @@
 import React from 'react';
 
-const List = ({ listData }) => {
+const List = ({ listData, select }) => { 
   return (
     <div>
       {
-        listData.map((item, index) => {
-          const utcSeconds = item;
+        listData.map((seconds, index) => {
           const date = new Date(0);
-          date.setUTCSeconds(utcSeconds);
+          date.setUTCSeconds(seconds);
 
           return (
-            <div key={ index }>{ date.toDateString() }</div>
+            <div key={index} onClick={select} id={seconds}>{ date.toDateString() }</div>
           )
         })
       }

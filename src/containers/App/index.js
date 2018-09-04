@@ -8,8 +8,8 @@ import DateList from '../../components/datelist.component';
 const apiUrl = 'https://api2.terravion.com';
 const access_token = process.env.REACT_APP_ACCESS_TOKEN;
 const user_id = process.env.REACT_APP_USER_ID;
-const epochStart = '1456200627'
-const epochEnd = '1456632627'
+const epochStart = '1456200627';
+const epochEnd = '1456632627';
 
 class App extends Component {
   constructor() {
@@ -17,8 +17,8 @@ class App extends Component {
 
     this.center = [38.540580, -121.877271];
     this.zoom = 15;
-    this.tileUrlTemplate = apiUrl + '/users/' + user_id + '/{z}/{x}/{y}.png?epochStart=' + epochStart +
-      '&epochEnd=' + epochEnd + '&access_token=' + access_token;
+    this.selectedEpoch = 0;
+    this.tileUrlTemplate = '';
   }
 
   componentDidMount() {
@@ -35,6 +35,7 @@ class App extends Component {
 
     this.map = this.generateMap();
     this.layersControl = L.control.layers();
+    this.generateURL(epochStart, epochEnd);
     this.generateLayers();
     this.generateOverlays();
   }
@@ -94,11 +95,25 @@ class App extends Component {
     this.layersControl.addTo(this.map);
   }
 
+  generateURL(startTime, endTime) {
+   this.tileUrlTemplate = apiUrl + '/users/' + user_id + '/{z}/{x}/{y}.png?epochStart=' + startTime +
+      '&epochEnd=' + endTime + '&access_token=' + access_token;
+  }
+
+  onDateSelect(e) {
+    this.selectedEpoch = e.target.id;
+    this.generateURL(epochStart, this.selectedEpoch);
+    this.generateLayers();
+    this.generateOverlays();
+  }
+
   render() {
+    this.boundSelect = this.onDateSelect.bind(this);
+
     return (
       <div id="container">
         <div id="map"></div>
-        <DateList data={ this.state }/>
+        <DateList data={ this.state } selectFunc={ this.boundSelect }/>
       </div>
     );
   }
