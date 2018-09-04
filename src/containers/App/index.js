@@ -10,10 +10,46 @@ const epochStart = '1456200627'
 const epochEnd = '1456632627'
 const center = [38.540580, -121.877271];
 const zoom = 15;
+const tileUrlTemplate = apiUrl + '/users/' + user_id + '/{z}/{x}/{y}.png?epochStart=' + epochStart +
+  '&epochEnd=' + epochEnd + '&access_token=' + access_token;
 
 class App extends Component {
   componentDidMount() {
     this.map = this.generateMap();
+    this.layersControl = this.generateLayers();
+  }
+
+  generateLayers() {
+    this.mapbox_Layer = L.tileLayer("https://api.tiles.mapbox.com/v2/cgwright.ca5740e5/{z}/{x}/{y}.jpg", {
+      drawControl: false,
+      maxZoom: 22,
+      maxNativeZoom: 19
+    }).addTo(this.map);
+    this.nc_layer = L.tileLayer(tileUrlTemplate + '&product=NC', {
+      attribution: 'TerrAvion',
+      maxZoom: 19,
+      tms: true
+    }).addTo(this.map);
+    this.cir_layer = L.tileLayer(tileUrlTemplate + '&product=CIR', {
+      attribution: 'TerrAvion',
+      maxZoom: 19,
+      tms: true
+    }) 
+    this.ndvi_layer = L.tileLayer(tileUrlTemplate + '&product=NDVI&colorMap=GRANULAR', {
+      attribution: 'TerrAvion',
+      maxZoom: 19,
+      tms: true
+    })
+    this.tirs_layer = L.tileLayer(tileUrlTemplate + '&product=TIRS&colorMap=T', {
+      attribution: 'TerrAvion',
+      maxZoom: 19,
+      tms: true
+    }) 
+    this.zone_layer = L.tileLayer(tileUrlTemplate + '&product=ZONE&colorMap=GRANULAR', {
+      attribution: 'TerrAvion',
+      maxZoom: 19,
+      tms: true
+    })
   }
 
   generateMap() {
