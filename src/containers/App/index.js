@@ -16,7 +16,9 @@ const tileUrlTemplate = apiUrl + '/users/' + user_id + '/{z}/{x}/{y}.png?epochSt
 class App extends Component {
   componentDidMount() {
     this.map = this.generateMap();
-    this.layersControl = this.generateLayers();
+    this.layersControl = L.control.layers();
+    this.generateLayers();
+    this.generateOverlays();
   }
 
   generateLayers() {
@@ -62,6 +64,16 @@ class App extends Component {
         }),
       ]
     })
+  }
+
+  generateOverlays() {
+    this.layersControl.addOverlay(this.mapbox_Layer, 'mapbox');
+    this.layersControl.addOverlay(this.nc_layer, 'nc');
+    this.layersControl.addOverlay(this.cir_layer, 'cir');
+    this.layersControl.addOverlay(this.ndvi_layer, 'ndvi');
+    this.layersControl.addOverlay(this.tirs_layer, 'thermal');
+    this.layersControl.addOverlay(this.zone_layer, 'zone');
+    this.layersControl.addTo(this.map);
   }
 
   render() {
