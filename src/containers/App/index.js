@@ -83,7 +83,10 @@ class App extends Component {
 
   render() {
     return (
-      <div id="map"></div>
+      <div id="container">
+        <div id="map"></div>
+        <div id="dateContainer"></div>
+      </div>
     );
   }
 }
