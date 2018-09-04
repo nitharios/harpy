@@ -107,8 +107,6 @@ class App extends Component {
 
   onDateSelect(e) {       
     this.map.eachLayer(layer => {
-      console.log(layer);
-      
       this.map.removeLayer(layer);
     })
   
