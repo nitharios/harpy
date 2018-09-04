@@ -4,16 +4,21 @@ import L from 'leaflet';
 import './App.css';
 
 const apiUrl = 'https://api2.terravion.com';
-const access_token = '2e68cee0-b2fd-4ef5-97f6-8e44afb09ffa';
-const user_id = '5bad4dfa-7262-4a0a-b1e5-da30793cec65';
+const access_token = process.env.REACT_APP_ACCESS_TOKEN;
+const user_id = process.env.REACT_APP_USER_ID;
 const epochStart = '1456200627'
 const epochEnd = '1456632627'
-const center = [38.540580, -121.877271];
-const zoom = 15;
-const tileUrlTemplate = apiUrl + '/users/' + user_id + '/{z}/{x}/{y}.png?epochStart=' + epochStart +
-  '&epochEnd=' + epochEnd + '&access_token=' + access_token;
 
 class App extends Component {
+  constructor() {
+    super();
+
+    this.center = [38.540580, -121.877271];
+    this.zoom = 15;
+    this.tileUrlTemplate = apiUrl + '/users/' + user_id + '/{z}/{x}/{y}.png?epochStart=' + epochStart +
+      '&epochEnd=' + epochEnd + '&access_token=' + access_token;
+  }
+
   componentDidMount() {
     this.map = this.generateMap();
     this.layersControl = L.control.layers();
@@ -27,27 +32,27 @@ class App extends Component {
       maxZoom: 22,
       maxNativeZoom: 19
     }).addTo(this.map);
-    this.nc_layer = L.tileLayer(tileUrlTemplate + '&product=NC', {
+    this.nc_layer = L.tileLayer(this.tileUrlTemplate + '&product=NC', {
       attribution: 'TerrAvion',
       maxZoom: 19,
       tms: true
     }).addTo(this.map);
-    this.cir_layer = L.tileLayer(tileUrlTemplate + '&product=CIR', {
+    this.cir_layer = L.tileLayer(this.tileUrlTemplate + '&product=CIR', {
       attribution: 'TerrAvion',
       maxZoom: 19,
       tms: true
     }) 
-    this.ndvi_layer = L.tileLayer(tileUrlTemplate + '&product=NDVI&colorMap=GRANULAR', {
+    this.ndvi_layer = L.tileLayer(this.tileUrlTemplate + '&product=NDVI&colorMap=GRANULAR', {
       attribution: 'TerrAvion',
       maxZoom: 19,
       tms: true
     })
-    this.tirs_layer = L.tileLayer(tileUrlTemplate + '&product=TIRS&colorMap=T', {
+    this.tirs_layer = L.tileLayer(this.tileUrlTemplate + '&product=TIRS&colorMap=T', {
       attribution: 'TerrAvion',
       maxZoom: 19,
       tms: true
     }) 
-    this.zone_layer = L.tileLayer(tileUrlTemplate + '&product=ZONE&colorMap=GRANULAR', {
+    this.zone_layer = L.tileLayer(this.tileUrlTemplate + '&product=ZONE&colorMap=GRANULAR', {
       attribution: 'TerrAvion',
       maxZoom: 19,
       tms: true
@@ -56,8 +61,8 @@ class App extends Component {
 
   generateMap() {
     return L.map('map', {
-      center: center,
-      zoom: zoom,
+      center: this.center,
+      zoom: this.zoom,
       layers: [
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
           attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
