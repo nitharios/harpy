@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import L from 'leaflet';
+import axios from 'axios';
 
 import './App.css';
+import DateList from '../../components/datelist.component';
 
 const apiUrl = 'https://api2.terravion.com';
 const access_token = process.env.REACT_APP_ACCESS_TOKEN;
@@ -20,6 +22,17 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // retrieve list of epoch dates from api
+    axios.get('https://api2.terravion.com/layers/getLayersFromBlockId?blockId=48ed28ca-d272-4d1f-bfe0-cb95b61eecbc&access_token=2e68cee0-b2fd-4ef5-97f6-8e44afb09ffa')
+      .then(res => {        
+        this.setState({
+          layerDates: res.data.reduce((prev, curr) => {
+            prev.push(curr.layerDateEpoch);
+            return prev;
+          }, [])                      
+        })
+      });
+
     this.map = this.generateMap();
     this.layersControl = L.control.layers();
     this.generateLayers();
@@ -85,7 +98,7 @@ class App extends Component {
     return (
       <div id="container">
         <div id="map"></div>
-        <div id="dateContainer"></div>
+        <DateList data={ this.state }/>
       </div>
     );
   }
