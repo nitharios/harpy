@@ -105,12 +105,17 @@ class App extends Component {
       '&epochEnd=' + endTime + '&access_token=' + access_token;
   }
 
-  onDateSelect(e) {    
+  onDateSelect(e) {       
+    this.map.eachLayer(layer => {
+      console.log(layer);
+      
+      this.map.removeLayer(layer);
+    })
+  
     this.selectedEpoch = e.target.dataset.epochdate;
-    this.selectedEpochEnd = this.generateEpochEndTime(this.selectedEpoch);     
+    this.selectedEpochEnd = this.generateEpochEndTime(this.selectedEpoch);  
     this.generateURL(this.selectedEpoch, this.selectedEpochEnd);
     this.generateLayers();
-    this.generateOverlays();
   }
 
   render() {
