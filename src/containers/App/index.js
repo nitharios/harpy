@@ -100,8 +100,8 @@ class App extends Component {
       '&epochEnd=' + endTime + '&access_token=' + access_token;
   }
 
-  onDateSelect(e) {
-    this.selectedEpoch = e.target.id;
+  onDateSelect(e) {    
+    this.selectedEpoch = e.target.dataset.epochdate;
     this.generateURL(epochStart, this.selectedEpoch);
     this.generateLayers();
     this.generateOverlays();

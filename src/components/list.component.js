@@ -9,7 +9,7 @@ const List = ({ listData, select }) => {
           date.setUTCSeconds(seconds);
 
           return (
-            <div key={index} onClick={select} id={seconds}>{ date.toDateString() }</div>
+            <div key={index} onClick={select} data-epochdate={seconds}>{ date.toDateString() }</div>
           )
         })
       }
