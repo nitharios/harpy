@@ -18,6 +18,7 @@ class App extends Component {
     this.center = [38.540580, -121.877271];
     this.zoom = 15;
     this.selectedEpoch = 0;
+    this.selectedEpochEnd = 0;
     this.tileUrlTemplate = '';
   }
 
@@ -39,6 +40,10 @@ class App extends Component {
     this.generateLayers();
     this.generateOverlays();
   }
+
+  generateEpochEndTime(epochStart) {    
+    return Number(epochStart) + 43200;
+  }  
 
   generateLayers() {
     this.mapbox_Layer = L.tileLayer("https://api.tiles.mapbox.com/v2/cgwright.ca5740e5/{z}/{x}/{y}.jpg", {
@@ -102,7 +107,8 @@ class App extends Component {
 
   onDateSelect(e) {    
     this.selectedEpoch = e.target.dataset.epochdate;
-    this.generateURL(epochStart, this.selectedEpoch);
+    this.selectedEpochEnd = this.generateEpochEndTime(this.selectedEpoch);     
+    this.generateURL(this.selectedEpoch, this.selectedEpochEnd);
     this.generateLayers();
     this.generateOverlays();
   }
