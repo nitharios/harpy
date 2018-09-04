@@ -5,11 +5,9 @@ import axios from 'axios';
 import './App.css';
 import DateList from '../../components/datelist.component';
 
-const apiUrl = 'https://api2.terravion.com';
+const apiUrl = process.env.REACT_APP_API_URL;
 const access_token = process.env.REACT_APP_ACCESS_TOKEN;
 const user_id = process.env.REACT_APP_USER_ID;
-const epochStart = '1456200627';
-const epochEnd = '1456632627';
 
 class App extends Component {
   constructor() {
@@ -17,6 +15,8 @@ class App extends Component {
 
     this.center = [38.540580, -121.877271];
     this.zoom = 15;
+    this.epochStart = '1456200627';
+    this.epochEnd = '1456632627';
     this.selectedEpoch = 0;
     this.selectedEpochEnd = 0;
     this.tileUrlTemplate = '';
@@ -34,15 +34,16 @@ class App extends Component {
         })
       });
 
+    // initialize map container and related layers
     this.map = this.generateMap();
     this.layersControl = L.control.layers();
-    this.generateURL(epochStart, epochEnd);
+    this.generateURL(this.epochStart, this.epochEnd);
     this.generateLayers();
     this.generateOverlays();
   }
 
-  generateEpochEndTime(epochStart) {    
-    return Number(epochStart) + 43200;
+  generateEpochEndTime(start) {    
+    return Number(start) + 43200;
   }  
 
   generateLayers() {
@@ -101,10 +102,10 @@ class App extends Component {
   }
 
   generateURL(startTime, endTime) {
-   this.tileUrlTemplate = apiUrl + '/users/' + user_id + '/{z}/{x}/{y}.png?epochStart=' + startTime +
-      '&epochEnd=' + endTime + '&access_token=' + access_token;
+   this.tileUrlTemplate = `${apiUrl}/users/${user_id}/{z}/{x}/{y}.png?epochStart=${startTime}&epochEnd=${endTime}&access_token=${access_token}`;
   }
 
+  // handles the event when a user selects a date
   onDateSelect(e) {       
     this.map.eachLayer(layer => {
       this.map.removeLayer(layer);

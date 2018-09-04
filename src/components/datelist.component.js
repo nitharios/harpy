@@ -2,6 +2,12 @@ import React from 'react';
 
 import List from './list.component';
 
+/**
+ * Creates a wrapper for list element components
+ * @param { object} data
+ * @param { function } selectFunc
+ * @return { HTMLElement }
+ */
 const DateList = ({ data, selectFunc }) => {    
   return (
     <div id="datelist">
@@ -10,7 +16,7 @@ const DateList = ({ data, selectFunc }) => {
           ? <List
             listData={ data.layerDates }
             select={ selectFunc }  />
-          : <div>No Data World!</div>
+          : <div>No Data Available!</div>
       }
     </div>
   )
