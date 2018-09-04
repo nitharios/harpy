@@ -5,10 +5,12 @@ const List = ({ listData }) => {
     <div>
       {
         listData.map((item, index) => {
-          const date = new Date(item);
+          const utcSeconds = item;
+          const d = new Date(0);
+          d.setUTCSeconds(utcSeconds);
 
           return (
-            <div key={ index }>{ date.toString() }</div>
+            <div key={ index }>{ d.toLocaleString() }</div>
           )
         })
       }
