@@ -6,11 +6,11 @@ const List = ({ listData }) => {
       {
         listData.map((item, index) => {
           const utcSeconds = item;
-          const d = new Date(0);
-          d.setUTCSeconds(utcSeconds);
+          const date = new Date(0);
+          date.setUTCSeconds(utcSeconds);
 
           return (
-            <div key={ index }>{ d.toLocaleString() }</div>
+            <div key={ index }>{ date.toDateString() }</div>
           )
         })
       }
