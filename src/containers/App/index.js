@@ -13,11 +13,17 @@ class App extends Component {
   constructor() {
     super();
 
+    this.state = {
+      selectedEpoch: 0,
+      layerDates: []
+    }
+
+    this.handleSelect = this.handleSelect.bind(this);
+
     this.center = [38.540580, -121.877271];
     this.zoom = 15;
     this.epochStart = '1456200627';
     this.epochEnd = '1456632627';
-    this.selectedEpoch = 0;
     this.selectedEpochEnd = 0;
     this.tileUrlTemplate = '';
   }
@@ -40,6 +46,16 @@ class App extends Component {
     this.generateURL(this.epochStart, this.epochEnd);
     this.generateLayers();
     this.generateOverlays();
+  }
+
+  componentDidUpdate() {
+    this.map.eachLayer(layer => {
+      this.map.removeLayer(layer);
+    })
+    
+    this.selectedEpochEnd = this.generateEpochEndTime(this.state.selectedEpoch)
+    this.generateURL(this.state.selectedEpoch, this.selectedEpochEnd);
+    this.generateLayers();
   }
 
   generateEpochEndTime(start) {    
@@ -105,12 +121,14 @@ class App extends Component {
    this.tileUrlTemplate = `${apiUrl}/users/${user_id}/{z}/{x}/{y}.png?epochStart=${startTime}&epochEnd=${endTime}&access_token=${access_token}`;
   }
 
+  handleSelect(e) {    
+    this.setState({
+      selectedEpoch: e.target.dataset.epochdate
+    })
+  }
+
   // handles the event when a user selects a date
   onDateSelect(e) {       
-    this.map.eachLayer(layer => {
-      this.map.removeLayer(layer);
-    })
-  
     this.selectedEpoch = e.target.dataset.epochdate;
     this.selectedEpochEnd = this.generateEpochEndTime(this.selectedEpoch);  
     this.generateURL(this.selectedEpoch, this.selectedEpochEnd);
@@ -123,7 +141,7 @@ class App extends Component {
     return (
       <div id="container">
         <div id="map"></div>
-        <DateList data={ this.state } selectFunc={ this.boundSelect }/>
+        <DateList data={ this.state.layerDates } onSelect={ this.handleSelect }/>
       </div>
     );
   }

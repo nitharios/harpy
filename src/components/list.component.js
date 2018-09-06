@@ -4,10 +4,10 @@ import React from 'react';
  * 
  * Maps over an array to return the list of available epoch times for rendering
  * @param { array } listData
- * @param { function } select
+ * @param { function } onSelect
  * @return { HTMLElement }  
  */
-const List = ({ listData, select }) => { 
+const List = ({ listData, onSelect }) => {   
   return (
     <div>
       {
@@ -16,7 +16,7 @@ const List = ({ listData, select }) => {
           date.setUTCSeconds(seconds);
 
           return (
-            <div key={index} onClick={select} data-epochdate={seconds}>{ date.toDateString() }</div>
+            <div key={index} onClick={onSelect} data-epochdate={seconds}>{ date.toDateString() }</div>
           )
         })
       }
